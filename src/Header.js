@@ -4,9 +4,9 @@ const Header = ({modeHandler}) => {
     return (
         <div className="container">
             <div>
-                <button onClick={()=>modeHandler(0)} className="ui small circular icon button green"></button>
-                <button onClick={()=>modeHandler(1)} className="ui small circular icon button blue"></button>
-                <button onClick={()=>modeHandler(2)} className="ui small circular icon button red"></button>
+                <button onClick={()=>modeHandler(0)} className="ui small circular icon button green">Node</button>
+                <button onClick={()=>modeHandler(1)} className="ui small circular icon button blue">Dir</button>
+                <button onClick={()=>modeHandler(2)} className="ui small circular icon button red">Undir</button>
             </div>
             {/* <button class="ui animated button">
                 <div class="visible content">
