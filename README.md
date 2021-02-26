@@ -11,6 +11,9 @@ A tool for visualizing graphs (weighted/unweighted and directed/undirected) usin
 
 <img src = "https://github.com/AbhishekKumar102K/Grafalizer/blob/main/resources/weights.png">
 
+P.S.
+Graph algorithms are currently being developed and added to the project
+
 Developed by:
 1. Abhishek Kumar
 2. Sayantan Biswas [https://github.com/hope-scotch](https://github.com/hope-scotch)
