@@ -1,0 +1,13 @@
+.container {
+  background-color: #2f3136;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.container .button {
+  height: 50px;
+  width: 50px;
+  margin: 10px;
+}

@@ -1,0 +1,23 @@
+/* .main-container {
+  position: absolute;
+  display: flex;
+  background-color: aqua;
+  width: 100%;
+  height: 100%;
+} */
+
+.canvas {
+  position: absolute;
+  background-color: aqua;
+  z-index: 1;
+}
+
+.node-container {
+  position: absolute;
+  z-index: 3;
+}
+
+.arrow-container {
+  position: absolute;
+  z-index: 2;
+}
