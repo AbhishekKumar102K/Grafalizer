@@ -4,7 +4,6 @@ import "./Node.css"
 
 const Node = ({x,y,id,selectNode,sel}) => {
 
-
     return (
         <div
             className= { (sel===id)? "node-highlighted" : "node"}

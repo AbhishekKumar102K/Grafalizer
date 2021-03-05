@@ -1,30 +1,47 @@
 import React from 'react'
+import { Dropdown } from 'semantic-ui-react'
 import "./Header.css"
-const Header = ({modeHandler}) => {
+
+const algoOptions = [ 
+    {
+        key: 'DFS',
+        text: 'DFS',
+        value: 'DFS',
+    },
+    {
+        key: 'BFS',
+        text: 'BFS',
+        value: 'BFS',
+    }
+]
+
+const Header = ({modeHandler, algoHandler}) => {
+    
+    const handleDropdownChange = (event,data) => {
+        algoHandler(data.value)
+    }
     return (
         <div className="container">
-            <div>
+
+            <span className='dropdown'>
+                <div style = {{fontSize : '1.4em', margin : '10px'}}>
+                    Algorithms
+                </div>
+                <div style = {{margin : '10px'}}>
+                <Dropdown
+                    inline
+                    options = {algoOptions}
+                    defaultValue = 'DFS'
+                    onChange={handleDropdownChange}/>
+                </div>
+            </span>
+
+            <div className="menu-items">
                 <button onClick={()=>modeHandler(0)} className="ui small circular icon button green">Node</button>
                 <button onClick={()=>modeHandler(1)} className="ui small circular icon button blue">Dir</button>
                 <button onClick={()=>modeHandler(2)} className="ui small circular icon button red">Undir</button>
+                <button onClick={()=>modeHandler(3)} className="ui small circular icon button purple runbutton">Run</button>
             </div>
-            {/* <button class="ui animated button">
-                <div class="visible content">
-                    Next
-                </div>
-                <div class="hidden content">
-                    <i aria-hidden="true" class="arrow right icon"></i>
-                </div>
-            </button>
-
-            <button class="ui vertical animated button">
-                <div class="hidden content">Shop</div>
-                <div class="visible content"><i aria-hidden="true" class="shop icon"></i></div>
-
-            </button><button class="ui fade animated button">
-                <div class="visible content">Sign-up for a Pro account</div>
-                <div class="hidden content">$12.99 a month</div>
-            </button> */}
         </div>
     )
 }

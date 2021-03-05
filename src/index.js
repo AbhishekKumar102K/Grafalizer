@@ -7,12 +7,18 @@ import Main from './Main';
 const App = () => {
 
   const [mode,setMode] = useState(0)
-  const modeHandler = flag => setMode(flag)
+  const [algo,setAlgo] = useState('DFS')
 
+  const modeHandler = (flag) => {
+    setMode(flag)
+  }
+  const algoHandler = (algo) => {
+    setAlgo(algo)
+  }
   return (
     <div>
-      <Header modeHandler = {modeHandler}/>
-      <Main mode = {mode}/>
+      <Header modeHandler = {modeHandler} algoHandler = {algoHandler}/>
+      <Main mode = {mode} algo = {algo} modeHandler = {modeHandler}/>
     </div>
   )
 }

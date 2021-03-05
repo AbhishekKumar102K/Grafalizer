@@ -15,6 +15,15 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed}) {
     const cenx = (tox + fromx) / 2
     const ceny = (toy + fromy) / 2
     
+    let selfLoop
+    if(((fromx==tox) && (fromy==toy)))
+    {
+      selfLoop = true
+      // console.log("yoso")
+    }
+
+    console.log(selfLoop)
+
     let angle = Math.atan((fromy - toy) / (tox - fromx))
     let inputOffset = 0, angleOffset = Math.PI/4, negAngle = 1
     if(fromx<tox && fromy<toy){
@@ -50,55 +59,106 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed}) {
       e.target.style.width = e.target.value.length + 4 + 'ch'
     }
 
-    return (
-      <div>
-        <div style={arrowStyle} className="arrowSurround" 
+    if(!selfLoop){
+      return (
+        <div>
+          <div style={arrowStyle} className="arrowSurround" 
+              onContextMenu = {(e)=>{
+              e.preventDefault()
+              removeEdge(id)
+            }}
+            onClick = {()=>setVisibility('visible')}>
+            <div
+            className = "arrow"
             onContextMenu = {(e)=>{
-            e.preventDefault()
-            removeEdge(id)
+              e.preventDefault()
+              removeEdge(id)
+            }}
+            onClick = {()=>setVisibility('visible')}
+            >
+
+            </div>
+
+          </div>
+
+          <div className = { directed? "arrow-head" : ""} style={{position: 'absolute',
+                                              top: toy + ((RADIUS + 12)*Math.sin(angle))*negAngle - 8,
+                                              left: tox - ((RADIUS + 12)*Math.cos(angle))*negAngle - 8,
+                                              transform: `rotate(-${angle + angleOffset}rad)`,
+                                            }}></div>
+
+          
+          <input type="text"
+                style = {{
+                  position: 'absolute',
+                  top: ceny - inputOffset,
+                  left: cenx,
+                  visibility: visible
+                }}
+                className = "input-weight"
+                placeholder = "0"
+                autoFocus
+                onChange = {handleChange}
+                onBlur = {()=>{
+                  if(value!==''){
+                    addWeight(id,value)
+                  }
+                }}
+                />
+          
+        </div>
+      )
+    }
+    else {
+      return (
+
+        
+
+        <div>
+          <div style = {{
+            position: "absolute",
+            top: ceny - 2*RADIUS,
+            left: cenx - RADIUS,
+            height: 2*RADIUS,
+            width: 2*RADIUS,
           }}
-          onClick = {()=>setVisibility('visible')}>
-          <div
-          className = "arrow"
+          className = "arrowDirected" 
+              
+          onClick = {()=>setVisibility('visible')}
           onContextMenu = {(e)=>{
             e.preventDefault()
             removeEdge(id)
           }}
-          onClick = {()=>setVisibility('visible')}
           >
-
           </div>
 
-        </div>
-        <div className = { directed? "arrow-head" : ""} style={{position: 'absolute',
-                                            top: toy + ((RADIUS + 12)*Math.sin(angle))*negAngle - 8,
-                                            left: tox - ((RADIUS + 12)*Math.cos(angle))*negAngle - 8,
-                                            transform: `rotate(-${angle + angleOffset}rad)`,
-                                          }}></div>
+          <div className = { directed? "arrow-head" : ""} style={{position: 'absolute',
+                                              top: toy - RADIUS - 7,
+                                              left: tox - RADIUS*2 + 13 ,
+                                              transform: `rotate(${20}deg)`,
+                                            }}></div>
 
-        
-        <input type="text"
-              style = {{
-                position: 'absolute',
-                top: ceny - inputOffset,
-                left: cenx,
-                visibility: visible
-              }}
-              className = "input-weight"
-              placeholder = "0"
-              autoFocus
-              onChange = {handleChange}
-              onBlur = {()=>{
-                if(value!==''){
-                  addWeight(id,value)
-                }
-              }}
-              />
-        
-        
-        
-      </div>
-    )
+
+          <input type="text"
+                style = {{
+                  position: 'absolute',
+                  top: ceny - 3.3*RADIUS,
+                  left: cenx - 0.4*RADIUS,
+                  visibility: visible,
+                }}
+                className = "input-weight"
+                placeholder = "0"
+                autoFocus
+                onChange = {handleChange}
+                onBlur = {()=>{
+                  if(value!==''){
+                    addWeight(id,value)
+                  }
+                }}
+                />
+        </div>
+      )
+    }
 }
 
 export default Arrow

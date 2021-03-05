@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import "./Main.css"
 import Node from './Node'
 import Arrow from './Arrow'
+import { runAlgo } from './runAlgo'
 
 const RADIUS = 20
 class Main extends React.Component {
@@ -12,7 +13,51 @@ class Main extends React.Component {
         this.canvasRef = React.createRef()
     }
 
-    state = { nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}]}
+
+    state = { nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}], adj: {}}
+
+    forceRender = () => this.forceUpdate()
+
+    componentDidUpdate() {
+        if(this.props.mode == 3){
+            this.formAdj()
+            runAlgo(this.props.algo, this.state.adj, this.state.items, this.state.nodes, this.selectNode, this.forceRender)
+            this.props.modeHandler(0)
+        }
+        console.log("Re render main")
+    }
+
+    formAdj = ()=> {
+        this.state.edges.forEach((edge)=>{
+            var u = edge.from, v = edge.to, w = edge.weight
+            if(this.state.adj[u]===undefined){
+                this.state.adj[u] = []
+            }
+            this.state.adj[u].push({to: v, w: w})
+
+            if(edge.directed===false){
+                if(this.state.adj[v]===undefined){
+                    this.state.adj[v] = []
+                }
+                this.state.adj[v].push({to: u, w: w})
+            }
+        })
+    }
+
+    dfsTrav = (u,vis) => {
+        vis[u] = true
+        
+        if(this.state.adj[u]===undefined){
+            this.state.adj[u] = []
+        }
+        
+        this.state.adj[u].forEach((node)=>{
+            if(!vis[node.to]){
+                this.dfsTrav(node.to,vis)
+            }
+        })
+        // console.log(u)
+    }
 
     removeEdge = (id)=>{
         var array = [...this.state.arrows]; // make a separate copy of the array
@@ -67,7 +112,17 @@ class Main extends React.Component {
                 const from = this.state.nodes[this.state.sel]
                 const to = this.state.nodes[id]
 
+                
                 this.flipNode(this.state.sel,0)
+                if(this.state.edges.some((edge)=>{
+                                        if(edge===undefined)
+                                            return false
+                                            this.setState({sel: 0})
+                                        return edge.from == this.state.sel && edge.to == id}))
+                {
+                    return
+                }
+
                 this.setState({edges: [...this.state.edges,{from: this.state.sel, to: id, weight: 0, directed: true}], 
                                 arrows: [...this.state.arrows,{ component: <Arrow
                                                                 fromx = {from.x}
@@ -83,11 +138,20 @@ class Main extends React.Component {
                                         ] , sel: 0})
 
             }
-            else {
+            else if(this.props.mode == 2) {
                 const from = this.state.nodes[this.state.sel]
                 const to = this.state.nodes[id]
 
                 this.flipNode(this.state.sel,0)
+                if(this.state.edges.some((edge)=>{
+                                    if(edge===undefined)
+                                        return false
+                                    this.setState({sel: 0})
+                                    return (edge.from === this.state.sel && edge.to === id) || (edge.from === id && edge.to === this.state.sel)}))
+                {
+                    return
+                }
+            
                 this.setState({edges: [...this.state.edges,{from: this.state.sel, to: id, weight: 0, directed: false}], 
                                 arrows: [...this.state.arrows,{ component: <Arrow
                                                                 fromx = {from.x}
@@ -109,7 +173,6 @@ class Main extends React.Component {
         const rect = this.canvasRef.current.getBoundingClientRect()
         let x = e.clientX - rect.left
         let y = e.clientY - rect.top
-
         var invalid = false
         const allNodes = this.state.nodes
         const clash = (node) => Math.abs(node.x-x)<=2*(RADIUS) && Math.abs(node.y-y)<=2*(RADIUS);
@@ -136,7 +199,9 @@ class Main extends React.Component {
     }
 
 
+
     render() {
+        
         return (
         <div className = "main-container">
             <canvas
@@ -159,7 +224,6 @@ class Main extends React.Component {
             <div className="arrow-container">
                 {this.state.arrows.map((arrow)=>arrow.component)}
             </div>
-
         </div>  
     )
  }
