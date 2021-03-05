@@ -7,9 +7,12 @@ A tool for visualizing graphs (weighted/unweighted and directed/undirected) usin
 3) For adding weights to edges, click anywhere on the edge and type in the weight value
 
 
-<img src = "https://github.com/AbhishekKumar102K/Computer-Graphics/blob/master/Tree%20Drawing/Exercise%204%20(HTML%20Doc)/3.png">
+<img src = "https://github.com/AbhishekKumar102K/Grafalizer/blob/main/resources/1.png">
 
-<img src = "https://github.com/AbhishekKumar102K/Computer-Graphics/blob/master/Tree%20Drawing/Exercise%204%20(HTML%20Doc)/10.png">
+<img src = "https://github.com/AbhishekKumar102K/Grafalizer/blob/main/resources/weights.png">
+
+P.S.
+Graph algorithms are currently being developed and added to the project
 
 Developed by:
 1. Abhishek Kumar
