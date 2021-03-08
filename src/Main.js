@@ -4,6 +4,7 @@ import "./Main.css"
 import Node from './Node'
 import Arrow from './Arrow'
 import { runAlgo } from './runAlgo'
+import Drawer from './Drawer'
 
 const RADIUS = 20
 class Main extends React.Component {
@@ -14,21 +15,38 @@ class Main extends React.Component {
     }
 
 
-    state = { nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}], adj: {}}
+    state = { nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}], adj: {}, bundle : []}
 
     forceRender = () => this.forceUpdate()
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         if(this.props.mode == 3){
+            this.state.bundle = []
             this.formAdj()
-            runAlgo(this.props.algo, this.state.adj, this.state.items, this.state.nodes, this.selectNode, this.forceRender)
+            // console.log(this.state.adj)
+            const progressBundle = {
+                edges : this.state.edges,
+                arrows : this.state.arrows,
+                removeEdge : this.removeEdge,
+                addWeight : this.addWeight
+            }
+            runAlgo(this.props.algo, this.state.adj, this.state.items, this.state.nodes, this.selectNode, this.forceRender, this.props.drawerHandler, this.state.bundle, progressBundle)
             this.props.modeHandler(0)
+            this.state.adj = {}
+        }
+        if(this.props.mode == 4 && prevProps!=this.props){
+            this.setState({ nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}], adj: {}, drawerNodes: []})
+            this.props.modeHandler(0)
+
         }
         console.log("Re render main")
     }
 
     formAdj = ()=> {
         this.state.edges.forEach((edge)=>{
+            if(edge===undefined)
+                return
+
             var u = edge.from, v = edge.to, w = edge.weight
             if(this.state.adj[u]===undefined){
                 this.state.adj[u] = []
@@ -66,7 +84,6 @@ class Main extends React.Component {
         array[id] = {}
         delete edgeList[id]
         this.setState({arrows: array, edges: edgeList});
-
     }
 
     addWeight = (id,weight)=>{
@@ -74,7 +91,9 @@ class Main extends React.Component {
         
         edgeList[id].weight = parseInt(weight)
 
-        this.setState({edges: edgeList});
+        // this.setState({edges: edgeList});
+        this.edges = edgeList
+        this.forceRender()
         console.log(id,weight)
     }
 
@@ -123,17 +142,18 @@ class Main extends React.Component {
                     return
                 }
 
+                var edgeId = this.state.edges.length 
                 this.setState({edges: [...this.state.edges,{from: this.state.sel, to: id, weight: 0, directed: true}], 
                                 arrows: [...this.state.arrows,{ component: <Arrow
                                                                 fromx = {from.x}
                                                                 fromy = {from.y}
                                                                 tox = {to.x}
                                                                 toy = {to.y}
-                                                                id = {this.state.edges.length}
+                                                                id = {edgeId}
                                                                 removeEdge = {this.removeEdge}
                                                                 addWeight = {this.addWeight}
                                                                 directed = {true}/>,
-                                                                id: this.state.edges.length
+                                                                id: edgeId
                                                             }
                                         ] , sel: 0})
 
@@ -161,8 +181,10 @@ class Main extends React.Component {
                                                                 id = {this.state.edges.length}
                                                                 removeEdge = {this.removeEdge}
                                                                 addWeight = {this.addWeight}
-                                                                directed = {false}/>,
-                                                                id: this.state.edges.length
+                                                                directed = {false}
+                                                                forceRender = {this.forceRender}/>,
+                                                                id: this.state.edges.length,
+                                                                
                                                             }
                                         ] , sel: 0})
             }
@@ -203,10 +225,8 @@ class Main extends React.Component {
     render() {
         
         return (
-        <div className = "main-container">
-            <canvas
-            width= "1700"
-            height="600"
+        <div className = "main-container" >
+            <div
             onClick={(e)=> {
                 if(this.props.mode==0){
                     this.createNode(e)
@@ -216,7 +236,7 @@ class Main extends React.Component {
             onContextMenu = {(e)=>{
                 e.preventDefault()
             }}>
-            </canvas>
+            </div>
             
             <div className="node-container">
                 {this.state.items}
@@ -224,7 +244,10 @@ class Main extends React.Component {
             <div className="arrow-container">
                 {this.state.arrows.map((arrow)=>arrow.component)}
             </div>
-        </div>  
+            <div className='drawer-container'>
+                <Drawer drawer = {this.props.drawer} drawerHandler = {this.props.drawerHandler} bundle = {this.state.bundle} algo = {this.props.algo}/>
+            </div>
+        </div>
     )
  }
 }   

@@ -6,7 +6,7 @@ const Node = ({x,y,id,selectNode,sel}) => {
 
     return (
         <div
-            className= { (sel===id)? "node-highlighted" : "node"}
+            className= { (sel===id)? "node node-highlighted" : (sel===1000+id)? "node node-visited" : "node"}
             style={{
                 left: x-20,
                 top: y-20

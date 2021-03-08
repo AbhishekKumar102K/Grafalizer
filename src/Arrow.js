@@ -1,7 +1,7 @@
 import {React, useState} from 'react'
 import "./Arrow.css"
 
-function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed}) {
+function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0%'}) {
 
     const [visible, setVisibility] = useState('hidden')
     const [value, setValue] = useState('')
@@ -19,28 +19,24 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed}) {
     if(((fromx==tox) && (fromy==toy)))
     {
       selfLoop = true
-      // console.log("yoso")
     }
 
     console.log(selfLoop)
 
     let angle = Math.atan((fromy - toy) / (tox - fromx))
-    let inputOffset = 0, angleOffset = Math.PI/4, negAngle = 1
-    if(fromx<tox && fromy<toy){
-      angleOffset += Math.PI
-      negAngle = -1
+    let inputOffset = 0, angleOffset = Math.PI/4
+
+    if(angle <= 0){
+      if(fromy<=toy && tox > fromx) // 4th quad
+        angle = 2*Math.PI + angle
+      else                          // 2nd quad
+        angle = Math.PI + angle
+    }
+    else{
+      if(fromy<=toy && tox<fromx)
+        angle = Math.PI + angle     // 3rd quad
     }
 
-    if(angle<0){
-      inputOffset = 25
-    }
-
-
-    if((fromy < toy && fromx > tox) || (fromy > toy && fromx > tox))
-      angle += Math.PI
-  
-  
-    if (angle < 0) angle += Math.PI
 
     const arrowStyle = {
       position: 'absolute',
@@ -76,14 +72,23 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed}) {
             }}
             onClick = {()=>setVisibility('visible')}
             >
+            
+            <div style={{
+              width: progress, 
+              backgroundColor: 'yellow', 
+              zIndex: 7
+              }}>
+
+            </div>
 
             </div>
 
           </div>
 
           <div className = { directed? "arrow-head" : ""} style={{position: 'absolute',
-                                              top: toy + ((RADIUS + 12)*Math.sin(angle))*negAngle - 8,
-                                              left: tox - ((RADIUS + 12)*Math.cos(angle))*negAngle - 8,
+                                              top: toy + ((RADIUS + 12)*Math.sin(angle)) - 8,
+                                              left: tox - ((RADIUS + 12)*Math.cos(angle)) - 8,
+                                              color: progress=='100%'?'yellow':'white',
                                               transform: `rotate(-${angle + angleOffset}rad)`,
                                             }}></div>
 
@@ -96,13 +101,14 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed}) {
                   visibility: visible
                 }}
                 className = "input-weight"
-                placeholder = "0"
-                autoFocus
+                placeholder = {0}
+                autoFocus = "true"
+                onSubmit = {()=>addWeight(id,value)}
                 onChange = {handleChange}
                 onBlur = {()=>{
-                  if(value!==''){
+                  if(value!=='')
                     addWeight(id,value)
-                  }
+                  
                 }}
                 />
           
@@ -111,8 +117,6 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed}) {
     }
     else {
       return (
-
-        
 
         <div>
           <div style = {{

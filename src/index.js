@@ -8,6 +8,7 @@ const App = () => {
 
   const [mode,setMode] = useState(0)
   const [algo,setAlgo] = useState('DFS')
+  const [drawer,setDrawer] = useState(false)
 
   const modeHandler = (flag) => {
     setMode(flag)
@@ -15,10 +16,20 @@ const App = () => {
   const algoHandler = (algo) => {
     setAlgo(algo)
   }
+  const drawerHandler = (drawer) => {
+    setDrawer(drawer)
+  }
+
+
   return (
-    <div>
+    <div style={{
+      display: 'flex',
+      flexDirection : 'column',
+      height : window.innerHeight - 2,
+      width: window.width
+      }}>
       <Header modeHandler = {modeHandler} algoHandler = {algoHandler}/>
-      <Main mode = {mode} algo = {algo} modeHandler = {modeHandler}/>
+      <Main mode = {mode} algo = {algo} modeHandler = {modeHandler} drawer = {drawer} drawerHandler = {drawerHandler}/>
     </div>
   )
 }

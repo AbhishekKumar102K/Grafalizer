@@ -2,8 +2,8 @@
   background-color: #2f3136;
   display: flex;
   width: 100%;
-  justify-content: space-evenly;
-  padding: 10px;
+  /* justify-content: space-evenly; */
+  /* padding: 10px; */
 }
 
 .container .button {
@@ -15,10 +15,9 @@
 .button:active {
   background-color: white;
 }
-.menu-items {
-  right: 0;
-  align-items: flex-end;
-}
+/* .menu-items {
+  /* right: 0; */
+  /* align-items: flex-end; */
 
 .dropdown {
   justify-content: left;
