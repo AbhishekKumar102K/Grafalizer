@@ -2,7 +2,7 @@ import {React,useState} from 'react'
 import "./Node.css"
 
 
-const Node = ({x,y,id,selectNode,sel}) => {
+const Node = ({x,y,id,selectNode,sel,removeNode}) => {
 
     return (
         <div
@@ -11,6 +11,16 @@ const Node = ({x,y,id,selectNode,sel}) => {
                 left: x-20,
                 top: y-20
             }}
+            onMouseEnter = {(e)=>{
+                if(e.buttons == 2){
+                  removeNode(id)
+                }
+              }}
+  
+            onContextMenu = {(e)=>{
+                e.preventDefault()
+                removeNode(id)
+              }}
             onClick = {()=>selectNode(id)}
         >   
         

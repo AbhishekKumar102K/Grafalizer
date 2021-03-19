@@ -35,7 +35,7 @@ const Header = ({modeHandler, algoHandler}) => {
                     </div>
                     <div style = {{margin : '10px'}}>
                     <Dropdown
-                        inline
+                        inline 
                         options = {algoOptions}
                         defaultValue = 'DFS'
                         onChange={handleDropdownChange}/>
@@ -44,11 +44,11 @@ const Header = ({modeHandler, algoHandler}) => {
 
             
                 <div className="menu-items">
-                    <button onClick={()=>modeHandler(0)} className="ui small circular icon button green">Node</button>
-                    <button onClick={()=>modeHandler(1)} className="ui small circular icon button blue">Dir</button>
-                    <button onClick={()=>modeHandler(2)} className="ui small circular icon button red">Undir</button>
-                    <button onClick={()=>modeHandler(3)} className="ui small circular icon button purple runbutton">Run</button>
-                    <button onClick={()=>modeHandler(4)} className="ui small circular icon button orange runbutton">Reset</button>
+                    <button onClick={()=>modeHandler(0)} className="header-button add-node">Node</button>
+                    <button onClick={()=>modeHandler(1)} className="header-button dir-edge">Dir</button>
+                    <button onClick={()=>modeHandler(2)} className="header-button undir-edge">Undir</button>
+                    <button onClick={()=>modeHandler(3)} className="header-button run-button">Run</button>
+                    <button onClick={()=>modeHandler(4)} className="header-button reset-button">Reset</button>
                 </div>
             </div>
         </div>

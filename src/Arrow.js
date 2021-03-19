@@ -1,7 +1,7 @@
 import {React, useState} from 'react'
 import "./Arrow.css"
 
-function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0%'}) {
+function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0%',progressColor=false}) {
 
     const [visible, setVisibility] = useState('hidden')
     const [value, setValue] = useState('')
@@ -21,13 +21,14 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0
       selfLoop = true
     }
 
-    console.log(selfLoop)
+    // console.log(selfLoop)
 
     let angle = Math.atan((fromy - toy) / (tox - fromx))
     let inputOffset = 0, angleOffset = Math.PI/4
 
     if(angle <= 0){
-      if(fromy<=toy && tox > fromx) // 4th quad
+      inputOffset = 25
+      if(fromy<=toy && tox >= fromx) // 4th quad
         angle = 2*Math.PI + angle
       else                          // 2nd quad
         angle = Math.PI + angle
@@ -63,7 +64,15 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0
               e.preventDefault()
               removeEdge(id)
             }}
+
+            onMouseEnter = {(e)=>{
+              if(e.buttons == 2){
+                removeEdge(id)
+              }
+            }}
+
             onClick = {()=>setVisibility('visible')}>
+
             <div
             className = "arrow"
             onContextMenu = {(e)=>{
@@ -75,7 +84,7 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0
             
             <div style={{
               width: progress, 
-              backgroundColor: 'yellow', 
+              backgroundColor: progressColor, 
               zIndex: 7
               }}>
 
@@ -127,11 +136,15 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0
             width: 2*RADIUS,
           }}
           className = "arrowDirected" 
-              
           onClick = {()=>setVisibility('visible')}
           onContextMenu = {(e)=>{
             e.preventDefault()
             removeEdge(id)
+          }}
+          onMouseEnter = {(e)=>{
+            if(e.buttons == 2){
+              removeEdge(id)
+            }
           }}
           >
           </div>
@@ -161,6 +174,7 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0
                 }}
                 />
         </div>
+
       )
     }
 }

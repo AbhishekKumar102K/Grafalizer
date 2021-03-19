@@ -1,4 +1,0 @@
-additional window/tab
-movable/deletable nodes
-reset button
-movable background like whiteboard

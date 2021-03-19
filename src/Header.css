@@ -1,7 +1,10 @@
 .container {
-  background-color: #2f3136;
+  /* background-color: #2f3136; */
+  background-color: #e0fbfc;
   display: flex;
   width: 100%;
+  height: 70px;
+  color: black;
   /* justify-content: space-evenly; */
   /* padding: 10px; */
 }
@@ -15,13 +18,32 @@
 .button:active {
   background-color: white;
 }
-/* .menu-items {
-  /* right: 0; */
-  /* align-items: flex-end; */
+
+.header-button {
+  height: 50px;
+  width: 50px;
+  margin: 10px;
+  cursor: pointer;
+  color: white;
+  border-radius: 50%;
+  background-color: #3f3737;
+  outline: none;
+  border: 0px;
+  transition: width 0.2s, height 0.2s;
+}
+
+.header-button:hover {
+  width: 55px;
+  height: 55px;
+}
+
+.header-button:focus {
+  border: 4px solid grey;
+}
 
 .dropdown {
   justify-content: left;
   align-items: left;
   flex-direction: column;
-  color: aliceblue;
+  color: #3f3737;
 }

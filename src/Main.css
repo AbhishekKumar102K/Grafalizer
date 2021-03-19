@@ -3,7 +3,7 @@
   display: flex;
   height: 100%;
   width: 100%;
-  background-color: #2f3136;
+  background-color: #293241;
   /* padding: 0% 0 2% 2%; */
   flex: 1;
 }
@@ -19,7 +19,8 @@
 
 .canvas {
   position: absolute;
-  background-color: aqua;
+  /* background-color: aqua; */
+  background-color: #98c1d9;
   z-index: 1;
   height: 100%;
   width: 75%;

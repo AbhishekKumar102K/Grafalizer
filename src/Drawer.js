@@ -11,7 +11,7 @@ function Drawer({drawer, drawerHandler, bundle, algo}) {
         const travNodesDiv = []
         if(algo==='DFS' || algo==='BFS'){
             bundle.forEach((node)=>{
-                travNodesDiv.push(<div style={{fontSize:'20px', margin:'10px'}}>{node.node}</div>)
+                travNodesDiv.push(<div style={{fontSize:'20px', margin:'10px'}}>{node}</div>)
             })
         }
         else if(algo==='Dijkstra'){
@@ -93,7 +93,8 @@ function Drawer({drawer, drawerHandler, bundle, algo}) {
     return (
         <div className = {(drawer)? "drawer drawer-open": "drawer"}>
             <h1 style={{height:'10%',marginLeft: '20px'}}>Analysis</h1>
-            <div style={{height: '80%', width: '100%', position:'relative'}}>
+            <div style={{height: '80%', width: '100%', position:'relative'}}
+                    className = "drawer-values">
                 {analysisContent()}
             </div>
             <Button onClick={()=>drawerHandler(false)} className="close-drawer">

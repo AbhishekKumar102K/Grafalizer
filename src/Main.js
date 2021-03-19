@@ -30,16 +30,16 @@ class Main extends React.Component {
                 removeEdge : this.removeEdge,
                 addWeight : this.addWeight
             }
-            runAlgo(this.props.algo, this.state.adj, this.state.items, this.state.nodes, this.selectNode, this.forceRender, this.props.drawerHandler, this.state.bundle, progressBundle)
+            runAlgo(this.props.algo, this.state.adj, this.state.items, this.state.nodes, this.selectNode, this.forceRender, this.props.drawerHandler, this.state.bundle, progressBundle, this.removeNode)
             this.props.modeHandler(0)
             this.state.adj = {}
         }
         if(this.props.mode == 4 && prevProps!=this.props){
-            this.setState({ nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}], adj: {}, drawerNodes: []})
+            this.setState({ nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}], adj: {}, bundle : []})
             this.props.modeHandler(0)
 
         }
-        console.log("Re render main")
+        // console.log("Re render main")
     }
 
     formAdj = ()=> {
@@ -82,8 +82,31 @@ class Main extends React.Component {
         var edgeList = [...this.state.edges];
 
         array[id] = {}
-        delete edgeList[id]
+        delete edgeList[id] 
         this.setState({arrows: array, edges: edgeList});
+    }
+
+    removeNode = (id)=>{
+        this.forceRender()
+        var nodes = this.state.nodes // make a separate copy of the array
+        var edgeList = this.state.edges;
+        var arrows = this.state.arrows
+
+        for(var i = 1; i <= this.state.edges.length; i++){
+            var edge = this.state.edges[i]
+
+            if(edge!==undefined){
+                if(edge.from === id || edge.to === id){
+                    console.log(i)
+                    arrows[i] = {}
+                    delete edgeList[i]
+                }
+            }
+        }
+
+        nodes[id] = {}
+        delete this.state.items[id-1]
+        this.setState({nodes: nodes, edges: edgeList, arrows: arrows});
     }
 
     addWeight = (id,weight)=>{
@@ -91,10 +114,8 @@ class Main extends React.Component {
         
         edgeList[id].weight = parseInt(weight)
 
-        // this.setState({edges: edgeList});
         this.edges = edgeList
         this.forceRender()
-        console.log(id,weight)
     }
 
 
@@ -110,6 +131,7 @@ class Main extends React.Component {
                             id = {id}
                             selectNode = {this.selectNode}
                             sel = {lit}
+                            removeNode = {this.removeNode}
                         />
         this.setState({
             items: itemList
@@ -122,7 +144,7 @@ class Main extends React.Component {
             return
         }
         if(this.state.sel == 0){
-            console.log(id)
+            // console.log(id)
             this.setState({sel: id})
             this.flipNode(id,id)
         }
@@ -213,6 +235,7 @@ class Main extends React.Component {
                         id = {id}
                         selectNode = {this.selectNode}
                         sel = {this.state.sel}
+                        removeNode = {this.removeNode}
                     />
                 ]
             })
