@@ -8,11 +8,12 @@
   /* height: 100%; */
   overflow: visible;
   width: 0%;
-  border-radius: 10% 0% 0% 10%;
+  /* border-radius: 10% 0% 0% 10%; */
   transition: width 1s ease;
   box-sizing: border-box;
   box-shadow: 1px 2px #888888;
   /* overflow-y: scroll; */
+  /* background-color: #3700b3; */
   background-image: linear-gradient(#2f3136, #aaaaaa);
 }
 
@@ -21,5 +22,5 @@
 }
 
 .drawer-open {
-  width: 22%;
+  width: 25%;
 }

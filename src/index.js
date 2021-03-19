@@ -28,7 +28,7 @@ const App = () => {
       height : window.innerHeight - 2,
       width: window.width
       }}>
-      <Header modeHandler = {modeHandler} algoHandler = {algoHandler}/>
+      <Header modeHandler = {modeHandler} algoHandler = {algoHandler} drawerHandler = {drawerHandler} />
       <Main mode = {mode} algo = {algo} modeHandler = {modeHandler} drawer = {drawer} drawerHandler = {drawerHandler}/>
     </div>
   )

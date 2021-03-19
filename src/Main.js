@@ -7,6 +7,7 @@ import { runAlgo } from './runAlgo'
 import Drawer from './Drawer'
 
 const RADIUS = 20
+let nnodes = -1
 class Main extends React.Component {
 
     constructor(){
@@ -15,24 +16,35 @@ class Main extends React.Component {
     }
 
 
-    state = { nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}], adj: {}, bundle : []}
+    state = { nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}], adj: {}, bundle : [], notif : false}
 
     forceRender = () => this.forceUpdate()
 
     componentDidUpdate(prevProps) {
-        if(this.props.mode == 3){
-            this.state.bundle = []
-            this.formAdj()
-            // console.log(this.state.adj)
-            const progressBundle = {
-                edges : this.state.edges,
-                arrows : this.state.arrows,
-                removeEdge : this.removeEdge,
-                addWeight : this.addWeight
+        if(this.props.mode === 'run algo'){
+            if(this.state.sel){           //if a node has been selected, start the algo
+                let startNode = this.state.sel
+                this.state.sel = 0
+
+                this.state.bundle = []
+                this.formAdj()
+                const progressBundle = {
+                    edges : this.state.edges,
+                    arrows : this.state.arrows,
+                    removeEdge : this.removeEdge,
+                    addWeight : this.addWeight
+                }
+                runAlgo(this.props.algo, startNode, this.state.adj, this.state.items, this.state.nodes, this.selectNode, this.forceRender, this.props.drawerHandler, this.state.bundle, progressBundle, this.removeNode)
+                this.state.adj = {}
+                this.props.modeHandler(0)
             }
-            runAlgo(this.props.algo, this.state.adj, this.state.items, this.state.nodes, this.selectNode, this.forceRender, this.props.drawerHandler, this.state.bundle, progressBundle, this.removeNode)
-            this.props.modeHandler(0)
-            this.state.adj = {}
+        }
+
+        if(this.props.mode == 3){
+            this.state.notif = true
+            nnodes>=0?this.props.modeHandler('run algo'):this.props.modeHandler(0)
+            console.log(nnodes)
+            this.props.drawerHandler(false)   
         }
         if(this.props.mode == 4 && prevProps!=this.props){
             this.setState({ nodes: [{}] , items : [], edges : [{}], sel : 0, arrows: [{}], adj: {}, bundle : []})
@@ -139,14 +151,16 @@ class Main extends React.Component {
     }
 
 
-    selectNode = id => {
+    selectNode = (id) => {
         if(this.props.mode==0){
             return
         }
         if(this.state.sel == 0){
-            // console.log(id)
-            this.setState({sel: id})
-            this.flipNode(id,id)
+            this.state.sel = id
+            if(this.props.mode === 'run algo')
+                this.setState({notif: false})
+            else
+                this.flipNode(id,id)
         }
         else{
             if(this.props.mode==1){
@@ -222,7 +236,14 @@ class Main extends React.Component {
         const clash = (node) => Math.abs(node.x-x)<=2*(RADIUS) && Math.abs(node.y-y)<=2*(RADIUS);
 
         invalid = allNodes.some(clash)
-        invalid = (invalid || allNodes.length>20)
+
+        nnodes = 0
+        allNodes.forEach((node)=>{
+            if(!(Object.keys(node).length === 0 && node.constructor === Object))
+                nnodes++
+        }) 
+        console.log(nnodes)
+        invalid = (invalid || nnodes>19)
 
         var id = this.state.nodes.length
         if(invalid===false){
@@ -269,6 +290,11 @@ class Main extends React.Component {
             </div>
             <div className='drawer-container'>
                 <Drawer drawer = {this.props.drawer} drawerHandler = {this.props.drawerHandler} bundle = {this.state.bundle} algo = {this.props.algo}/>
+            </div>
+            <div className='notif-container'>   
+                <div className='notif'> 
+                    {<div className='notif-text' style={this.state.notif?{opacity:'1'}:{opacity:'0'}}>{nnodes>=0?'Select a node':'Add nodes'}</div>}
+                </div>
             </div>
         </div>
     )

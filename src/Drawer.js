@@ -6,10 +6,15 @@ const INF = 100000000000
 
 function Drawer({drawer, drawerHandler, bundle, algo}) {
 
+
     const analysisContent = ()=> {
         
+        if(!drawer)
+            return <div></div>
+
         const travNodesDiv = []
         if(algo==='DFS' || algo==='BFS'){
+            // console.log("yahan aaya")
             bundle.forEach((node)=>{
                 travNodesDiv.push(<div style={{fontSize:'20px', margin:'10px'}}>{node}</div>)
             })

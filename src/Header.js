@@ -20,10 +20,11 @@ const algoOptions = [
     }
 ]
 
-const Header = ({modeHandler, algoHandler}) => {
+const Header = ({modeHandler, algoHandler, drawerHandler}) => {
     
     const handleDropdownChange = (event,data) => {
         algoHandler(data.value)
+        drawerHandler(false)
     }
     return (
         <div className="container">

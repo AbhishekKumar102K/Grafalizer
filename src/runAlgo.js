@@ -14,7 +14,7 @@ class Queue {
 
 const INF = 100000000000
 
-export const runAlgo = async (algo, adj, items, nodes, selectNode, renderMain, drawerHandler, bundle, progressBundle, removeNode) => {
+export const runAlgo = async (algo, startNode, adj, items, nodes, selectNode, renderMain, drawerHandler, bundle, progressBundle, removeNode) => {
     const sleep = delay=> new Promise ((resolve)=> setTimeout(resolve,delay))
     var edges = progressBundle.edges, arrows = progressBundle.arrows, removeEdge = progressBundle.removeEdge, addWeight = progressBundle.addWeight
 
@@ -192,13 +192,13 @@ export const runAlgo = async (algo, adj, items, nodes, selectNode, renderMain, d
         await sleep(500)
         dist[0] = 0
 
-        pq.insert(1,0)
-        dist[1] = 0
+        pq.insert(startNode,0)
+        dist[startNode] = 0
 
         for(var i=1;i<nodes.length;i++){
             bundle.push({node: i, dist: INF})
         }
-        bundle[0] = {node: 1, dist: 0}
+        bundle[0] = {node: startNode, dist: 0}
         renderMain()
         while(!pq.empty()){
             var at = pq.front().element
@@ -258,8 +258,12 @@ export const runAlgo = async (algo, adj, items, nodes, selectNode, renderMain, d
     var dist = new Array(nodes.length).fill(INF)
     var p = new Array(nodes.length).fill(-1)
 
+    resetColor()
+    resetEdges()
+
     if(algo == 'DFS'){
         drawerHandler(true)
+        await dfs(startNode,vis)
         for(var i = 1; i<nodes.length; i++){
             if(!vis[i])
                 await dfs(i,vis)
@@ -268,6 +272,7 @@ export const runAlgo = async (algo, adj, items, nodes, selectNode, renderMain, d
     }   
     else if(algo == 'BFS'){
         drawerHandler(true)
+        await bfs(startNode,vis)
         for(var i = 1; i<nodes.length; i++){
             if(!vis[i])
                 await bfs(i,vis)
@@ -275,8 +280,6 @@ export const runAlgo = async (algo, adj, items, nodes, selectNode, renderMain, d
         resetColor()
     }
     else if(algo == 'Dijkstra'){
-        resetColor()
-        resetEdges()
         await drawerHandler(true)
         dijkstra()
     }
