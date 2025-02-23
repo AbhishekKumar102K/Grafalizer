@@ -1,0 +1,86 @@
+.main-container-dark {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  /* box-shadow:  1.5px -5px 0px 0px #e0fbfc; */
+  box-shadow: 1.5px -2px 0px 0px #212121;
+  flex: 1;
+  transition: 0.5s;
+}
+
+.drawer-container-dark {
+  text-align: center;
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+.canvas-dark {
+  position: absolute;
+  /* background-color: aqua; */
+  background-color: #181818;
+  z-index: 1;
+  height: 100%;
+  width: 75%;
+  transition: 0.5s;
+}
+
+.node-container {
+  position: absolute;
+  z-index: 3;
+}
+
+.arrow-container {
+  position: absolute;
+  z-index: 2;
+}
+
+.notif-container-dark {
+  position: absolute;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  /* background-color: white; */
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.notif-dark {
+  height: 20%;
+  width: 25%;
+  display: flex;
+  background-color: black;
+  transition: 0.5s;
+}
+
+.notif-text-dark {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  height: 100%;
+  /* background-color: #bb86fc; */
+  background-color: #bb86fc;
+  font-size: 2em;
+  transition: 0.5s ease-in-out;
+}
+
+.canvas-tools {
+  opacity: 0.2;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  transition: 0.2s;
+}
+
+.canvas-tools:hover {
+  opacity: 1;
+}

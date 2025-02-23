@@ -1,10 +1,10 @@
 import React from 'react'
 import './Drawer.css'
-import { Button } from 'semantic-ui-react'
+import 'semantic-ui-react'
 
 const INF = 100000000000
 
-function Drawer({drawer, drawerHandler, bundle, algo}) {
+function Drawer({drawer, drawerHandler, bundle, algo, nodes, lightMode}) {
 
 
     const analysisContent = ()=> {
@@ -14,26 +14,29 @@ function Drawer({drawer, drawerHandler, bundle, algo}) {
 
         const travNodesDiv = []
         if(algo==='DFS' || algo==='BFS'){
-            // console.log("yahan aaya")
             bundle.forEach((node)=>{
-                travNodesDiv.push(<div style={{fontSize:'20px', margin:'10px'}}>{node}</div>)
+                if(node!==undefined)
+                    travNodesDiv.push(<div style={{fontSize:'20px', margin:'10px', color: lightMode==='light'?'black':'white'}}>{node}</div>)
             })
         }
         else if(algo==='Dijkstra'){
 
             var maxDist = 0
             bundle.forEach((node)=>{
+                if(node.node === -1)
+                    return
                 if(node.dist !== INF)
                     maxDist = Math.max(maxDist,node.dist)
             })
 
             bundle.forEach((node)=>{
+                if(node.node === -1)
+                    return 
                 var barwidth
                 if(maxDist===0)
                     barwidth = 0
                 else
                     barwidth = (node.dist/maxDist)*100
-                // console.log(barwidth)
 
                 const barText = ()=> {
 
@@ -44,8 +47,10 @@ function Drawer({drawer, drawerHandler, bundle, algo}) {
                             width: `${barwidth*0.75}%`,
                             backgroundColor: 'turqoise',
                             margin: '2px',
-                            color: 'yellow',
-                            transition: '1s'
+                            color: lightMode==='light'?'red':'white',
+                            fontWeight: 'bold',
+                            transition: '1s',
+                            marginRight: '15%'
                             }}
                         >
                             {!node.dist?node.dist:'INF'}
@@ -56,9 +61,9 @@ function Drawer({drawer, drawerHandler, bundle, algo}) {
                         return (
                         <span style={{
                             width: `${barwidth*0.75}%`,
-                            backgroundColor: 'cyan',
+                            backgroundColor: lightMode==='light'?'cyan':'#bb86fc',
                             margin: '2px',
-                            color: 'black',
+                            color: lightMode==='light'?'black':'#eeeeee',
                             transition: '1s '
                             }}
                         >
@@ -81,8 +86,9 @@ function Drawer({drawer, drawerHandler, bundle, algo}) {
                         display: 'flex',
                         alignSelf : 'center',
                         fontWeight: 'bold',
-                        paddingLeft: '5%'
-                        }}>
+                        paddingLeft: '5%',
+                        color: lightMode==='light'?'black':'#eeeeee',
+                    }}>
                         {node.node}
                     </span>
                     
@@ -96,15 +102,16 @@ function Drawer({drawer, drawerHandler, bundle, algo}) {
     }
 
     return (
-        <div className = {(drawer)? "drawer drawer-open": "drawer"}>
-            <h1 style={{height:'10%',marginLeft: '20px'}}>Analysis</h1>
+        <div className = {(drawer)? (lightMode==='light'?"drawer drawer-open":"drawer-dark drawer-open") : (lightMode==='light'?"drawer":"drawer-dark")}>
+            <h1 style={lightMode==='light'?{height:'10%'}:{height:'10%',color:'#dddddd'}}>Analysis</h1>
             <div style={{height: '80%', width: '100%', position:'relative'}}
                     className = "drawer-values">
                 {analysisContent()}
             </div>
-            <Button onClick={()=>drawerHandler(false)} className="close-drawer">
+
+            <div onClick = {()=>drawerHandler(false)} className='close-drawer'>
                 Close
-            </Button>
+            </div>
         </div>
     )
 }

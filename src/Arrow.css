@@ -27,7 +27,9 @@
 }
 
 .input-weight:focus,
-.input-weight:active {
+.input-weight:active, 
+.input-weight-dark:focus,
+.input-weight-dark:active{
   background: transparent;
   outline: none;
   border: none;
@@ -38,6 +40,15 @@
   font-size: 1.2em;
   background: transparent;
   border: none;
+  height: 25px;
+}
+
+.input-weight-dark {
+  z-index: 4;
+  font-size: 1.2em;
+  background: transparent;
+  border: none;
+  color: white;
   height: 25px;
 }
 

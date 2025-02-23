@@ -20,21 +20,23 @@ const algoOptions = [
     }
 ]
 
-const Header = ({modeHandler, algoHandler, drawerHandler}) => {
+const Header = ({modeHandler, algoHandler, drawerHandler, toggleMode, lightMode}) => {
     
     const handleDropdownChange = (event,data) => {
         algoHandler(data.value)
         drawerHandler(false)
     }
-    return (
-        <div className="container">
+    
 
-            <div style={{width:'75%', display: 'flex', justifyContent: 'space-around' }}>
+    return (
+        <div className= {lightMode==='light'?"container":"container-dark"}>
+
+            <div style={{width:'75%', display: 'flex', justifyContent: 'space-around', borderBottom:'2px solid #2f3136'}}>
                 <span className='dropdown'>
-                    <div style = {{fontSize : '1.4em', margin : '10px'}}>
+                    <div style = {lightMode==='light'?{fontSize : '1.4em', margin : '10px'}:{fontSize : '1.4em', margin : '10px', color: '#eeeeee'}}>
                         Algorithms
                     </div>
-                    <div style = {{margin : '10px'}}>
+                    <div style = {lightMode==='light'?{margin : '10px'}:{margin : '10px', color: '#eeeeee'}}>
                     <Dropdown
                         inline 
                         options = {algoOptions}
@@ -48,8 +50,16 @@ const Header = ({modeHandler, algoHandler, drawerHandler}) => {
                     <button onClick={()=>modeHandler(0)} className="header-button add-node">Node</button>
                     <button onClick={()=>modeHandler(1)} className="header-button dir-edge">Dir</button>
                     <button onClick={()=>modeHandler(2)} className="header-button undir-edge">Undir</button>
-                    <button onClick={()=>modeHandler(3)} className="header-button run-button">Run</button>
-                    <button onClick={()=>modeHandler(4)} className="header-button reset-button">Reset</button>
+                    
+                </div>
+            </div>
+
+            <div className='settings-container'>
+                
+                <div className={lightMode==='light'?'toggle-switch':'toggle-switch-dark'} onClick = {toggleMode}>
+                    <div className= {lightMode==='light'?'toggle-ball':'toggle-ball-dark'}>
+
+                    </div>
                 </div>
             </div>
         </div>

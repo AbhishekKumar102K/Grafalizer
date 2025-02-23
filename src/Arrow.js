@@ -1,10 +1,15 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 import "./Arrow.css"
 
-function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0%',progressColor=false}) {
+function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0%',progressColor=false, lightMode}) {
 
+    // console.log(lightMode)
     const [visible, setVisibility] = useState('hidden')
     const [value, setValue] = useState('')
+    
+    useEffect(()=>{
+      console.log("sdf")
+    },[lightMode])
 
     const RADIUS = 20
     const delx = tox - fromx
@@ -109,7 +114,7 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0
                   left: cenx,
                   visibility: visible
                 }}
-                className = "input-weight"
+                className = {lightMode==='light'?"input-weight":"input-weight-dark"}
                 placeholder = {0}
                 autoFocus = "true"
                 onSubmit = {()=>addWeight(id,value)}
@@ -163,7 +168,7 @@ function Arrow({fromx,fromy,tox,toy,id,removeEdge,addWeight,directed,progress='0
                   left: cenx - 0.4*RADIUS,
                   visibility: visible,
                 }}
-                className = "input-weight"
+                className = {lightMode==='light'?"input-weight":"input-weight-dark"}
                 placeholder = "0"
                 autoFocus
                 onChange = {handleChange}

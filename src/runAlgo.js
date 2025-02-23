@@ -14,47 +14,9 @@ class Queue {
 
 const INF = 100000000000
 
-export const runAlgo = async (algo, startNode, adj, items, nodes, selectNode, renderMain, drawerHandler, bundle, progressBundle, removeNode) => {
+export const runAlgo = async (algo, startNode, adj, items, nodes, selectNode, renderMain, drawerHandler, bundle, progressBundle, removeNode, resetColor, resetEdges,lightMode) => {
     const sleep = delay=> new Promise ((resolve)=> setTimeout(resolve,delay))
     var edges = progressBundle.edges, arrows = progressBundle.arrows, removeEdge = progressBundle.removeEdge, addWeight = progressBundle.addWeight
-
-    const resetColor = () => {
-        for(var i = 1;i<=items.length; i++){
-            if(items[i-1]!==undefined){
-                items[i-1] = <Node
-                x = {nodes[i].x}
-                y = {nodes[i].y}
-                id = {nodes[i].id}
-                selectNode = {selectNode}
-                sel = {0}
-                removeNode = {removeNode}
-            />
-            }
-        }   
-        renderMain()
-    }
-
-    const resetEdges = async () => {
-        for(var i = 1;i<=edges.length; i++){
-            if(edges[i]===undefined)
-                continue
-            arrows[i] = { component: <Arrow
-                fromx = {nodes[edges[i].from].x}
-                fromy = {nodes[edges[i].from].y}
-                tox = {nodes[edges[i].to].x}
-                toy = {nodes[edges[i].to].y}
-                id = {i}
-                removeEdge = {removeEdge}
-                addWeight = {addWeight}
-                directed = {edges[i].directed}
-                progress = {'100%'}
-                progressColor = {'#ffffff'}/>,
-                id: i
-            } 
-        }
-        renderMain()
-    }
-
 
     const highlightEdge = async (fromId, toId, doneStart, doneEnd, progressColor) => {
 
@@ -64,7 +26,6 @@ export const runAlgo = async (algo, startNode, adj, items, nodes, selectNode, re
 
             var edge = edges[i]
             if(edge.from === fromId && edge.to === toId){
-                // console.log('Abeyyy ooo',doneStart,doneEnd)
                 for(var done = doneStart; done<=doneEnd; done += (doneStart<=doneEnd)?1:-1){
                     arrows[i] = { component: <Arrow
                         fromx = {nodes[fromId].x}
@@ -76,7 +37,8 @@ export const runAlgo = async (algo, startNode, adj, items, nodes, selectNode, re
                         addWeight = {addWeight}
                         directed = {edge.directed}
                         progress = {done + '%'}
-                        progressColor = {progressColor}/>,
+                        progressColor = {progressColor}
+                        lightMode = {lightMode}/>,
                         id: i
                     }    
                     await sleep(5)
@@ -96,7 +58,8 @@ export const runAlgo = async (algo, startNode, adj, items, nodes, selectNode, re
                         addWeight = {addWeight}
                         directed = {edge.directed}
                         progress = {done + '%'}
-                        progressColor = {progressColor}/>,
+                        progressColor = {progressColor}
+                        lightMode = {lightMode}/>,
                         id: i
                     }    
                     await sleep(5)
@@ -194,20 +157,31 @@ export const runAlgo = async (algo, startNode, adj, items, nodes, selectNode, re
 
         pq.insert(startNode,0)
         dist[startNode] = 0
+        
+        // console.log("bundle = ",bundle)
 
         for(var i=1;i<nodes.length;i++){
-            bundle.push({node: i, dist: INF})
+            if(nodes[i]!==undefined)
+                bundle.push({node: i, dist: INF})
+            else
+                bundle.push({node: -1, dist: INF})
         }
-        bundle[0] = {node: startNode, dist: 0}
-        renderMain()
+        
+        bundle.forEach((val)=>console.log(val))
+        // console.log("bundle after push = ",bundle)
+        console.log(items)
+        // renderMain()
         while(!pq.empty()){
             var at = pq.front().element
             pq.pop_front()
-            bundle[at-1] = {node: at, dist: dist[at]}
-
-            if(items[at-1]===undefined)
+            
+            if(items[at-1]===undefined){
+                console.log("deleted node",at)
                 continue 
+            }
 
+            bundle[at-1] = {node: at, dist: dist[at]}
+            
             items[at-1] = <Node
                 x = {nodes[at].x}
                 y = {nodes[at].y}
@@ -265,7 +239,7 @@ export const runAlgo = async (algo, startNode, adj, items, nodes, selectNode, re
         drawerHandler(true)
         await dfs(startNode,vis)
         for(var i = 1; i<nodes.length; i++){
-            if(!vis[i])
+            if(nodes[i] !== {} && !vis[i])
                 await dfs(i,vis)
         }
         resetColor()
@@ -274,7 +248,7 @@ export const runAlgo = async (algo, startNode, adj, items, nodes, selectNode, re
         drawerHandler(true)
         await bfs(startNode,vis)
         for(var i = 1; i<nodes.length; i++){
-            if(!vis[i])
+            if(nodes[i] !== {} && !vis[i])
                 await bfs(i,vis)
         }
         resetColor()
