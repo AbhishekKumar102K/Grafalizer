@@ -1,0 +1,4 @@
+Placement:
+Algorithms shift to left
+position of reset and run button
+hover on buttons to show info

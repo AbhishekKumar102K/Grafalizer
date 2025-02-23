@@ -2,3 +2,8 @@ additional window/tab
 movable/deletable nodes
 reset button
 movable background like whiteboard
+
+
+added:
+Node and edge deletion
+node text user-select none
